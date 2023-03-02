@@ -15,7 +15,7 @@ local config = {
     commit = nil, -- commit hash (NIGHTLY ONLY)
     pin_plugins = nil, -- nil, true, false (nil will pin plugins on stable only)
     skip_prompts = false, -- skip prompts about breaking changes
-    show_changelog = true, -- show the changelog after performing an update
+    show_changelog = true, -- show the changelog after performing an updatehasura_actions_standalone
     auto_reload = false, -- automatically reload and sync packer after a successful update
     auto_quit = false, -- automatically quit the current session after a successful update
     -- remotes = { -- easily add new remotes to track
@@ -42,7 +42,7 @@ local config = {
   options = {
     opt = {
       -- set to true or false etc.
-      relativenumber = true, -- sets vim.opt.relativenumber
+      relativenumber = false, -- sets vim.opt.relativenumber
       number = true, -- sets vim.opt.number
       spell = false, -- sets vim.opt.spell
       signcolumn = "auto", -- sets vim.opt.signcolumn to auto
@@ -206,12 +206,49 @@ local config = {
       ["<leader>bc"] = { "<cmd>BufferLinePickClose<cr>", desc = "Pick to close" },
       ["<leader>bj"] = { "<cmd>BufferLinePick<cr>", desc = "Pick to jump" },
       ["<leader>bt"] = { "<cmd>BufferLineSortByTabs<cr>", desc = "Sort by tabs" },
-      -- quick save
-      -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
+      -- Astro reload
+      ["<leader>ar"] = { "<cmd>AstroReload<cr>", desc = "Astro reload" },
+      -- Move between windows
+      ["<A-n>"] = { function() require("smart-splits").move_cursor_left() end, desc = "Move to left split" },
+      ["<A-e>"] = { function() require("smart-splits").move_cursor_down() end, desc = "Move to below split" },
+      ["<A-i>"] = { function() require("smart-splits").move_cursor_up() end, desc = "Move to above split" },
+      ["<A-o>"] = { function() require("smart-splits").move_cursor_right() end, desc = "Move to right split" },
+      --   -- Resize with arrows
+      ["<S-Up>"] = { function() require("smart-splits").resize_up() end, desc = "Resize split up" },
+      ["<S-Down>"] = { function() require("smart-splits").resize_down() end, desc = "Resize split down" },
+      ["<S-Left>"] = { function() require("smart-splits").resize_left() end, desc = "Resize split left" },
+      ["<S-Right>"] = { function() require("smart-splits").resize_right() end, desc = "Resize split right" },
+      --Use alt move line like vscode n
+      ["<A-Down>"] = { ":m .+2<CR>==", desc = "Move line down" },
+      ["<A-Up>"] = { " :m .-2<CR>==", desc = "Move line up" },
+      ["<A-S-Down>"] = { " ==yyp", desc = "Copy line down" },
+      ["<A-S-Up>"] = { " ==yyP", desc = "Copy line up" },
+      --Toggleterm
+      ["<C-`>"] = {":ToggleTermToggleAll<CR>", desc = "toggle terminal"},
+    },
+    i = {
+      --Use alt move line like vscode n
+      ["<A-Down>"] = { " <Esc>:m .+1<CR>==gi", desc = "Move line down" },
+      ["<A-Up>"] = { "<Esc>:m .-2<CR>==gi", desc = "Move line up" },
+      ["<A-S-Down>"] = { " <Esc> ==yypi", desc = "Copy line down" },
+      ["<A-S-Up>"] = { " <Esc> ==yyPi", desc = "Cop line up" },
+      --Toggleterm
+      ["<C-`>"] = {"<Esc>:ToggleTermToggleAll<CR>", desc = "toggle terminal"},
+    },
+    v = {
+      --Use alt move line like vscode n
+      ["<A-Down>"] = { ":m '>+1<CR>gv=gv", desc = "Move selection lines down" },
+      ["<A-Up>"] = { ":m '<-2<CR>gv=gv", desc = "Move selection lines up" },
+      ["<A-S-Down>"] = { " : '<,'>yank<CR>Pgv=gv", desc = "Copy selectino lines down" },
+      ["<A-S-Up>"] = { " : '<,'>yank<CR>`]pgv=gv", desc = "Copy selectino lines up" },
+      --Toggleterm
+      ["<C-`>"] = {":ToggleTermToggleAll<CR>", desc = "toggle terminal"},
     },
     t = {
       -- setting a mapping to false will disable it
-      -- ["<esc>"] = false,
+      ["<esc>"] = { "<C-\\><C-N>", desc="Enter normal mode from a terminal sessino"},
+      --Toggleterm
+      ["<C-`>"] = {"<esc><cmd>ToggleTermToggleAll<CR>", desc = "toggle terminal"},
     },
   },
 
@@ -225,149 +262,154 @@ local config = {
       -- Add plugins, the packer syntax without the "use"
       -- { "andweeb/presence.nvim" },
       -- {
-      --   "ray-x/lsp_signature.nvim",
-      --   event = "BufRead",
-      --   config = function()
-      --     require("lsp_signature").setup()
-      --   end,
-      -- },
+        --   "ray-x/lsp_signature.nvim",
+        --   event = "BufRead",
+        --   config = function()
+          --     require("lsp_signature").setup()
+          --   end,
+          -- },
 
-      -- We also support a key value style plugin definition similar to NvChad:
-      -- ["ray-x/lsp_signature.nvim"] = {
-      --   event = "BufRead",
-      --   config = function()
-      --     require("lsp_signature").setup()
-      --   end,
-      -- },
-    },
-    ["neo-tree"] = {
-        filesystem = {
-            filtered_items = {
-                visible = true, 
-                hide_dotfiles = false,
-                hide_gitignored = true,
+          -- We also support a key value style plugin definition similar to NvChad:
+          -- ["ray-x/lsp_signature.nvim"] = {
+            --   event = "BufRead",
+            --   config = function()
+              --     require("lsp_signature").setup()
+              --   end,
+              -- },
+              { "rescript-lang/vim-rescript" },
             },
-            }
-    },
+            ["neo-tree"] = {
+              filesystem = {
+                filtered_items = {
+                  visible = true, 
+                  hide_dotfiles = false,
+                  hide_gitignored = true,
+                },
+              }
+            },
+            ["toggleterm"] = {
+              insert_mappings = true,
+            },
+            -- All other entries override the require("<key>").setup({...}) call for default plugins
+            ["null-ls"] = function(config) -- overrides `require("null-ls").setup(config)`
+              -- config variable is the default configuration table for the setup function call
+              --
 
-    -- All other entries override the require("<key>").setup({...}) call for default plugins
-    ["null-ls"] = function(config) -- overrides `require("null-ls").setup(config)`
-      -- config variable is the default configuration table for the setup function call
-      -- local null_ls = require "null-ls"
+              -- local null_ls = require "null-ls"
 
-      -- Check supported formatters and linters
-      -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
-      -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
-      config.sources = {
-        -- Set a formatter
-        -- null_ls.builtins.formatting.stylua,
-        -- null_ls.builtins.formatting.prettier,
-      }
-      return config -- return final config table
-    end,
-    treesitter = { -- overrides `require("treesitter").setup(...)`
-      -- ensure_installed = { "lua" },
-    },
-    -- use mason-lspconfig to configure LSP installations
-    ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
-      -- ensure_installed = { "sumneko_lua" },
-    },
-    -- use mason-null-ls to configure Formatters/Linter installation for null-ls sources
-    ["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
-      -- ensure_installed = { "prettier", "stylua" },
-    },
-    ["mason-nvim-dap"] = { -- overrides `require("mason-nvim-dap").setup(...)`
+              -- Check supported formatters and linters
+              -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
+              -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
+              config.sources = {
+                -- Set a formatter
+                -- null_ls.builtins.formatting.stylua,
+                -- null_ls.builtins.formatting.prettier,
+              }
+              return config -- return final config table
+            end,
+            treesitter = { -- overrides `require("treesitter").setup(...)`
+            -- ensure_installed = { "lua" },
+          },
+          -- use mason-lspconfig to configure LSP installations
+          ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
+          -- ensure_installed = { "sumneko_lua" },
+        },
+        -- use mason-null-ls to configure Formatters/Linter installation for null-ls sources
+        ["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
+        -- ensure_installed = { "prettier", "stylua" },
+      },
+      ["mason-nvim-dap"] = { -- overrides `require("mason-nvim-dap").setup(...)`
       -- ensure_installed = { "python" },
     },
-  },
+},
 
-  -- LuaSnip Options
-  luasnip = {
-    -- Extend filetypes
-    filetype_extend = {
-      -- javascript = { "javascriptreact" },
-    },
-    -- Configure luasnip loaders (vscode, lua, and/or snipmate)
-    vscode = {
-      -- Add paths for including more VS Code style snippets in luasnip
-      paths = {},
-    },
+-- LuaSnip Options
+luasnip = {
+  -- Extend filetypes
+  filetype_extend = {
+    -- javascript = { "javascriptreact" },
   },
-
-  -- CMP Source Priorities
-  -- modify here the priorities of default cmp sources
-  -- higher value == higher priority
-  -- The value can also be set to a boolean for disabling default sources:
-  -- false == disabled
-  -- true == 1000
-  cmp = {
-    source_priority = {
-      nvim_lsp = 1000,
-      luasnip = 750,
-      buffer = 500,
-      path = 250,
-    },
+  -- Configure luasnip loaders (vscode, lua, and/or snipmate)
+  vscode = {
+    -- Add paths for including more VS Code style snippets in luasnip
+    paths = {},
   },
+},
 
-  -- Customize Heirline options
-  heirline = {
-    -- -- Customize different separators between sections
-    -- separators = {
+-- CMP Source Priorities
+-- modify here the priorities of default cmp sources
+-- higher value == higher priority
+-- The value can also be set to a boolean for disabling default sources:
+-- false == disabled
+-- true == 1000
+cmp = {
+  source_priority = {
+    nvim_lsp = 1000,
+    luasnip = 750,
+    buffer = 500,
+    path = 250,
+  },
+},
+
+-- Customize Heirline options
+heirline = {
+  -- -- Customize different separators between sections
+  -- separators = {
     --   tab = { "", "" },
     -- },
     -- -- Customize colors for each element each element has a `_fg` and a `_bg`
     -- colors = function(colors)
-    --   colors.git_branch_fg = astronvim.get_hlgroup "Conditional"
-    --   return colors
-    -- end,
-    -- -- Customize attributes of highlighting in Heirline components
-    -- attributes = {
-    --   -- styling choices for each heirline element, check possible attributes with `:h attr-list`
-    --   git_branch = { bold = true }, -- bold the git branch statusline component
-    -- },
-    -- -- Customize if icons should be highlighted
-    -- icon_highlights = {
-    --   breadcrumbs = false, -- LSP symbols in the breadcrumbs
-    --   file_icon = {
-    --     winbar = false, -- Filetype icon in the winbar inactive windows
-    --     statusline = true, -- Filetype icon in the statusline
-    --   },
-    -- },
-  },
+      --   colors.git_branch_fg = astronvim.get_hlgroup "Conditional"
+      --   return colors
+      -- end,
+      -- -- Customize attributes of highlighting in Heirline components
+      -- attributes = {
+        --   -- styling choices for each heirline element, check possible attributes with `:h attr-list`
+        --   git_branch = { bold = true }, -- bold the git branch statusline component
+        -- },
+        -- -- Customize if icons should be highlighted
+        -- icon_highlights = {
+          --   breadcrumbs = false, -- LSP symbols in the breadcrumbs
+          --   file_icon = {
+            --     winbar = false, -- Filetype icon in the winbar inactive windows
+            --     statusline = true, -- Filetype icon in the statusline
+            --   },
+            -- },
+          },
 
-  -- Modify which-key registration (Use this with mappings table in the above.)
-  ["which-key"] = {
-    -- Add bindings which show up as group name
-    register = {
-      -- first key is the mode, n == normal mode
-      n = {
-        -- second key is the prefix, <leader> prefixes
-        ["<leader>"] = {
-          -- third key is the key to bring up next level and its displayed
-          -- group name in which-key top level menu
-          ["b"] = { name = "Buffer" },
-        },
-      },
-    },
-  },
+          -- Modify which-key registration (Use this with mappings table in the above.)
+          ["which-key"] = {
+            -- Add bindings which show up as group name
+            register = {
+              -- first key is the mode, n == normal mode
+              n = {
+                -- second key is the prefix, <leader> prefixes
+                ["<leader>"] = {
+                  -- third key is the key to bring up next level and its displayed
+                  -- group name in which-key top level menu
+                  ["b"] = { name = "Buffer" },
+                },
+              },
+            },
+          },
 
-  -- This function is run last and is a good place to configuring
-  -- augroups/autocommands and custom filetypes also this just pure lua so
-  -- anything that doesn't fit in the normal config locations above can go here
-  polish = function()
-    -- Set up custom filetypes
-    -- vim.filetype.add {
-    --   extension = {
-    --     foo = "fooscript",
-    --   },
-    --   filename = {
-    --     ["Foofile"] = "fooscript",
-    --   },
-    --   pattern = {
-    --     ["~/%.config/foo/.*"] = "fooscript",
-    --   },
-    -- }
-  end,
-}
+          -- This function is run last and is a good place to configuring
+          -- augroups/autocommands and custom filetypes also this just pure lua so
+          -- anything that doesn't fit in the normal config locations above can go here
+          polish = function()
+            -- Set up custom filetypes
+            -- vim.filetype.add {
+              --   extension = {
+                --     foo = "fooscript",
+                --   },
+                --   filename = {
+                  --     ["Foofile"] = "fooscript",
+                  --   },
+                  --   pattern = {
+                    --     ["~/%.config/foo/.*"] = "fooscript",
+                    --   },
+                    -- }
+                  end,
+                }
 
-return config
+                return config
