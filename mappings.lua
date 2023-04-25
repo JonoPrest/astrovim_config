@@ -36,7 +36,7 @@ return {
     ["<C-`>"] = { ":ToggleTerm<CR>", desc = "toggle terminal" },
 
     ["<A-o>"] = { "<cmd>bnext<cr>", desc = "Next buffer" },
-    ["<A-N>"] = { "<cmd>bprevious<cr>", desc = "Previous buffer" },
+    ["<A-n>"] = { "<cmd>bprevious<cr>", desc = "Previous buffer" },
 
     --Telescope
     ["<leader>fr"] = { ":Telescope resume<cr>", desc = "Telescope resume" },
