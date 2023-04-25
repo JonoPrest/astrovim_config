@@ -24,7 +24,16 @@ return {
 
       require("orgmode").setup {
         org_agenda_files = { "~/Library/CloudStorage/GoogleDrive-jjprest@gmail.com/My Drive/orgs/*", "~/my-orgs/**/*" },
-        org_default_notes_file = '~/Library/CloudStorage/GoogleDrive-jjprest@gmail.com/My Drive/orgs/refile.org',
+        org_default_notes_file = "~/Library/CloudStorage/GoogleDrive-jjprest@gmail.com/My Drive/orgs/refile.org",
+      }
+    end,
+  },
+  {
+    "kylechui/nvim-surround",
+    tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+    config = function()
+      require("nvim-surround").setup {
+        -- Configuration here, or leave empty to use defaults
       }
     end,
   },
