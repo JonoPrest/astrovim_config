@@ -3,6 +3,9 @@ local astronvim = require "core.utils"
 return {
   -- first key is the mode
   n = {
+    --Undo
+    ["<C-z>"] = { "u", desc = "Undo" },
+
     -- second key is the lefthand side of the map
     -- mappings seen under group name "Buffer"
     ["<leader>bb"] = { "<cmd>tabnew<cr>", desc = "New tab" },
@@ -29,29 +32,36 @@ return {
     ["<A-S-Down>"] = { " ==yyp", desc = "Copy line down" },
     ["<A-S-Up>"] = { " ==yyP", desc = "Copy line up" },
     --Toggleterm
+    ["<C-'>"] = { ":ToggleTerm<CR>", desc = "toggle terminal" },
     ["<C-`>"] = { ":ToggleTerm<CR>", desc = "toggle terminal" },
 
     ["<A-o>"] = { "<cmd>bnext<cr>", desc = "Next buffer" },
-    ["<A-n>"] = { "<cmd>bprevious<cr>", desc = "Previous buffer" },
-
-    --Rescript
-    ["<leader>rf"] = { ":RescriptFormat<cr>", desc = "RescriptFormat" },
-    ["<leader>rt"] = { ":RescriptTypeHint<cr>", desc = "RescriptTypeHint" },
-    ["<leader>rb"] = { ":RescriptBuild<cr>", desc = "RescriptBuild" },
-    ["<leader>rd"] = { ":RescriptJumpToDefinition<cr>", desc = "RescriptJumpToDefinition" },
+    ["<A-N>"] = { "<cmd>bprevious<cr>", desc = "Previous buffer" },
 
     --Telescope
     ["<leader>fr"] = { ":Telescope resume<cr>", desc = "Telescope resume" },
 
     --Trouble.nvim
-    ["<leader>xx"] = {":TroubleToggle<cr>", desc = "TroubleToggle"},
-    ["<leader>xw"] = {":TroubleToggle workspace_diagnostics<cr>", desc = "TroubleToggle workspace_diagnostics"},
-    ["<leader>xd"] = {":TroubleToggle document_diagnostics<cr>", desc = "TroubleToggle document_diagnostics"},
-    ["<leader>xq"] = {":TroubleToggle quickfix<cr>", desc = "TroubleToggle quickfix"},
-    ["<leader>xl"] = {":TroubleToggle loclist<cr>", desc = "TroubleToggle loclist"},
-    ["<leader>xr"] = {":TroubleToggle lsp_references<cr>", desc = "TroubleToggle lsp_references"},
+    ["<leader>xx"] = { ":TroubleToggle<cr>", desc = "TroubleToggle" },
+    ["<leader>xw"] = { ":TroubleToggle workspace_diagnostics<cr>", desc = "TroubleToggle workspace_diagnostics" },
+    ["<leader>xd"] = { ":TroubleToggle document_diagnostics<cr>", desc = "TroubleToggle document_diagnostics" },
+    ["<leader>xq"] = { ":TroubleToggle quickfix<cr>", desc = "TroubleToggle quickfix" },
+    ["<leader>xl"] = { ":TroubleToggle loclist<cr>", desc = "TroubleToggle loclist" },
+    ["<leader>xr"] = { ":TroubleToggle lsp_references<cr>", desc = "TroubleToggle lsp_references" },
+    ["<leader>xn"] = {
+      function() require("trouble").next { skip_groups = true, jump = true } end,
+      desc = "Trouble next (API)",
+    },
+    ["<leader>xN"] = {
+      function() require("trouble").previous { skip_groups = true, jump = true } end,
+      desc = "Trouble previous (API)",
+    },
+
+    --NeoTree
+    ["<leader>n"] = { ":Neotree focus<cr>", desc = "Neotree focus" },
   },
   i = {
+    ["<C-z>"] = { "<Esc>u", desc = "Undo" },
     --Use alt move line like vscode n
     ["<A-Down>"] = { " <Esc>:m .+1<CR>==gi", desc = "Move line down" },
     ["<A-Up>"] = { "<Esc>:m .-2<CR>==gi", desc = "Move line up" },
@@ -59,14 +69,18 @@ return {
     ["<A-S-Up>"] = { " <Esc> ==yyPi", desc = "Cop line up" },
     --Toggleterm
     ["<C-`>"] = { "<Esc>:ToggleTerm<CR>", desc = "toggle terminal" },
+    ["<C-'>"] = { "<Esc>:ToggleTerm<CR>", desc = "toggle terminal" },
   },
   v = {
+    --Undo
+    ["<C-z>"] = { "<Esc>u", desc = "Undo" },
     --Use alt move line like vscode n
     ["<A-Down>"] = { ":m '>+1<CR>gv=gv", desc = "Move selection lines down" },
     ["<A-Up>"] = { ":m '<-2<CR>gv=gv", desc = "Move selection lines up" },
     ["<A-S-Down>"] = { " : '<,'>yank<CR>Pgv=gv", desc = "Copy selectino lines down" },
     ["<A-S-Up>"] = { " : '<,'>yank<CR>`]pgv=gv", desc = "Copy selectino lines up" },
     --Toggleterm
+    ["<C-'>"] = { ":ToggleTerm<CR>", desc = "toggle terminal" },
     ["<C-`>"] = { ":ToggleTerm<CR>", desc = "toggle terminal" },
   },
   t = {
@@ -75,6 +89,7 @@ return {
     -- ["<esc>"] = { "<C-\\><C-N>", desc = "Enter normal mode from a terminal sessino" },
     --Toggleterm
     ["<C-`>"] = { "<esc><cmd>ToggleTerm<CR>", desc = "toggle terminal" },
+    ["<C-'>"] = { "<esc><cmd>ToggleTerm<CR>", desc = "toggle terminal" },
     -- Move between windows
     ["<A-n>"] = { function() require("smart-splits").move_cursor_left() end, desc = "Move to left split" },
     ["<A-e>"] = { function() require("smart-splits").move_cursor_down() end, desc = "Move to below split" },

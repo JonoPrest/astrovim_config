@@ -7,7 +7,8 @@ return {
       -- group name in which-key top level menu
       ["b"] = { name = "Buffer" },
       ["a"] = { name = "Astro" },
-      ["r"] = { name = "Rescript" },
+      ["x"] = { name = "Trouble" },
+      ["o"] = { name = "Orgmode" },
     },
   },
 }
