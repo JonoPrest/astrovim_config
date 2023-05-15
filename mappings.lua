@@ -59,6 +59,12 @@ return {
 
     --NeoTree
     ["<leader>n"] = { ":Neotree focus<cr>", desc = "Neotree focus" },
+    --Searchbox
+    ["<leader>sf"] = { ":SearchBoxMatchAll<cr>", desc = "Search All Matches (SearchBoxMatchAll)" },
+    ["<leader>ss"] = { ":SearchBoxIncSearch<cr>", desc = "Search Nearest Match (SearchBoxIncSearch)" },
+    ["<leader>sr"] = { ":SearchBoxReplace confirm=menu<cr>", desc = "Search And Replace (SearchBoxReplace)" },
+    ["<leader>soe"] = { ":SearchBoxReplace confirm=menu<cr> exact=true", desc = "Exact Search And Replace (SearchBoxReplace)" },
+    ["<leader>soi"] = { ":SearchBoxReplace confirm=menu<cr> modifier=case-sensitive", desc = "Exact Search And Replace (SearchBoxReplace)" },
   },
   i = {
     ["<C-z>"] = { "<Esc>u", desc = "Undo" },
@@ -82,6 +88,41 @@ return {
     --Toggleterm
     ["<C-'>"] = { ":ToggleTerm<CR>", desc = "toggle terminal" },
     ["<C-`>"] = { ":ToggleTerm<CR>", desc = "toggle terminal" },
+    --Searchbox
+    --
+    --From the DOCS:
+    --
+    --Search arguments
+    -- You can tweak the behaviour of the search if you pass any of these properties:
+    --
+    -- reverse: Look for matches above the cursor.
+    -- exact: Look for an exact match.
+    -- title: Set title for the popup window.
+    -- prompt: Set input prompt.
+    -- default_value: Set initial value for the input.
+    -- visual_mode: Search only in the recently selected text.
+    -- show_matches: If set to true it'll show number of matches in the input. If set to a string the pattern {total} will be replaced with the number of matches. If the pattern {match} is found it'll be replaced with the index of match under the cursor. You can set for example, show_matches='[M:{match} T:{total}]'. The default format of the message is [{match}/{total}].
+    -- modifier: Apply a "search modifier" at the beginning of the search pattern. It won't be visible in the search input. Possible values:
+    -- ignore-case: Make the search case insensitive. Applies the pattern \c.
+    -- case-sensitive: Make the search case sensitive. Applies the pattern \C.
+    -- no-magic: Act as if the option nomagic is used. Applies the pattern \M.
+    -- magic: Act as if the option magic is on. Applies the pattern \m.
+    -- very-magic: Anything that isn't alphanumeric has a special meaning. Applies the pattern \v.
+    -- very-no-magic: Only the backslash and the terminating character has special meaning. Applies the pattern \V.
+    -- plain: Is an alias for very-no-magic.
+    -- disabled: Is the default. Don't apply any modifier.
+    -- :: It acts as a prefix. Use it to add your own modifier to the search. Example, :\C\V will make the search very-no-magic and also case sensitive. See :help /magic to know more about possible patterns.
+    -- Other arguments are exclusive to one type of search.
+    --
+    -- For match_all:
+    --
+    -- clear_matches: Get rid of the highlight after the search is done.
+    -- For replace:
+    --
+    -- confirm: Ask the user to choose an action on each match. There are three possible values: off, native and menu. off disables the feature. native uses neovim's built-in confirm method. menu displays a list of possible actions below the match. Is worth mentioning menu will only show up if neovim's window is big enough, confirm type will fallback to "native" if it isn't.
+    ["<leader>sf"] = { ":SearchBoxMatchAll visual_mode=true<cr>", desc = "Search All Matches (SearchBoxMatchAll)" },
+    ["<leader>ss"] = { ":SearchBoxIncSearch visual_mode=true<cr>", desc = "Search Nearest Match (SearchBoxIncSearch)" },
+    ["<leader>sr"] = { ":SearchBoxReplace visual_mode=true confirm=menu<cr>", desc = "Search And Replace (SearchBoxReplace)" },
   },
   t = {
     -- setting a mapping to false will disable it
