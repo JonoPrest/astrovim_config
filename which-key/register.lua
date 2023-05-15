@@ -9,6 +9,16 @@ return {
       ["a"] = { name = "Astro" },
       ["x"] = { name = "Trouble" },
       ["o"] = { name = "Orgmode" },
+      ["s"] = { 
+        name = "SearchBox Options",
+        ["o"] = {name= "Options"}
+      },
+    },
+  },
+  v = {
+    -- second key is the prefix, <leader> prefixes
+    ["<leader>"] = {
+      ["s"] = { name = "Search"},
     },
   },
 }
