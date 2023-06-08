@@ -1,1 +1,0 @@
--- return function() vim.g.markdown_fenced_languages = [["rescript"]] end
