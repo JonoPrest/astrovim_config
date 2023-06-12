@@ -1,6 +1,7 @@
 return {
   -- example for addings schemas to yamlls
-  yamlls = { -- override table for require("lspconfig").yamlls.setup({...})
+  yamlls = {
+    -- override table for require("lspconfig").yamlls.setup({...})
     settings = {
       yaml = {
         schemas = {
